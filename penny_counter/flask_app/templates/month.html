@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+    <title>{{month.name}}</title>
+</head>
+<body>
+    <div class="month">
+        <div class="welcome">
+            <h1>{{ month.name }}</h1>
+            <a href="/welcome" class="btn btn-dark">Home</a>
+        </div>
+        <div class="info">
+            <div class="col">
+                {% with messages = get_flashed_messages(category_filter = ['purchase']) %}
+                {% if messages %}
+                <div class="flash" role="alert">
+                    <strong>Try Again!</strong>
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+                <form action="/purchase/create" method="post" id="insert">
+                    <div class="form-control">
+                        <label for="purchase_date">Day:</label>
+                        <input type="text" name="purchase_date">
+                    </div>
+                    <div class="form-control">
+                        <label for="description">Description:</label>
+                        <input type="text" name="description">
+                    </div>
+                    <div class="form-control">
+                        <label for="price">Price</label>
+                        <input type="text" name="price">
+                    </div>
+                    <button class="btn-outline-light">Add Purchase</button>
+                    <input type="hidden" name="month_id" value="{{ month.id }}">
+                </form>
+            </div>
+            <div class="col">
+            {% if purchases[0] is defined %}
+                <table class="table table-striped table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col">Day</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Price</th>
+                            <th scope="col"><h3>Total: ${{ purchases | sum(attribute="price") }}</h3></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if purchases[0] is defined %}
+                        {% for purchase in purchases %}
+                            <tr>
+                                <th scope="row"> {{ purchase.purchase_date }}</th>
+                                <th scope="row"> {{ purchase.description }} </th>
+                                <th scope="row"> ${{ purchase.price }} </th>
+                                <th><a href="/delete/{{ purchase.id }}">Delete</a> | <a href="/edit/{{ purchase.id }}/{{ month.id }}">Edit</a></th>
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            <input type="hidden" name="month_id" value="{{ month.id }}">
+            {% else %}
+            <h1>Enter a Purchase!</h1>
+            {% endif %}
+</body>
+</html>

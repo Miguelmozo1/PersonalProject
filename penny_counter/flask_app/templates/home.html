@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+    <title>Welcome</title>
+</head>
+<body>
+    {% if months[0] is defined%}
+        <div class="format">
+            <div class="welcome">
+                <h1>Welcome {{ user.first_name }}</h1>
+                <h2><a class="btn btn-dark" href="/logout">Logout</a></h2>
+            </div>
+            <form action="/month/create" method="post" id="insert">
+                <div class="form-control">
+                    <label for="month">Add Month:</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="form-control">
+                    <label for="limit">Limit:</label>
+                    <input type="text" name="limit">
+                </div>
+                <button class="butn">Add</button>
+                <input type="hidden" name="user_id" value="{{user.id}}">
+            </form>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Month</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Set Limit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        {% for i in months %}
+                            <tr>
+                                <th><a href="/month/{{ i.id }}">{{ i.name }}</a></th>
+                                <th>{{i.created_at.strftime('%m/%d/%Y')}}</th>
+                                <th>${{i.limit}}</th>
+                            </tr>
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="format">
+            <div class="welcome">
+                <h1>Welcome {{ user.first_name }}</h1>
+                <a href="/logout">Logout</a>
+            </div>
+            <form action="/month/create" method="post" id="insert">
+                <div class="form-control">
+                    <label for="month">Add Month:</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="form-control">
+                    <label for="limit">Limit:</label>
+                    <input type="text" name="limit">
+                </div>
+                <button class="butn">Add</button>
+                <input type="hidden" name="user_id" value="{{user.id}}">
+            </form>
+        </div>
+    {% endif %}
+</body>
+</html>
