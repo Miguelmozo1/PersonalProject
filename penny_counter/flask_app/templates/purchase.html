@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/app.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <div class="format">
+        <div class="welcome">
+            <h1>{{ purchase.description }}</h1>
+            <div>
+                <h2><a class="btn btn-dark" href="/welcome">Home</a></h2>
+                <h2><a class="btn btn-dark" href="/month/{{month}}">Back</a></h2>
+            </div>
+        </div>
+        <div class="info">
+            {% with messages = get_flashed_messages(category_filter = ['purchase']) %}
+            {% if messages %}
+            <div class="flash" role="alert">
+                <strong>Try Again!</strong>
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+            <form action="/update/{{ purchase.id }}/{{ month }}" method="post" id="insert">
+                <div class="form-control">
+                    <label>Day:</label>
+                    <input type="text" name="purchase_date" value="{{purchase.purchase_date}}">
+                </div>
+                <div class="form-control">
+                    <label>Description</label>
+                    <input type="text" name="description" value="{{ purchase.description }}">
+                </div>
+                <div class="form-control">
+                    <label>Price</label>
+                    <input type="text" name="price" value="{{ purchase.price }}">
+                </div>
+                <button class="btn-outline-light">Update Purchase</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
